@@ -286,6 +286,17 @@ class COCO:
                             plt.plot(x[sk],y[sk], linewidth=3, color=c)
                     plt.plot(x[v>0], y[v>0],'o',markersize=8, markerfacecolor=c, markeredgecolor='k',markeredgewidth=2)
                     plt.plot(x[v>1], y[v>1],'o',markersize=8, markerfacecolor=c, markeredgecolor=c, markeredgewidth=2)
+                if 'bbox' in ann and type(ann['bbox']) == list:
+                    # bounding box
+                    bbox = np.array(ann['bbox'])
+                    [x, y, w, h] = bbox
+                    bbox_x = [x, x+w, x+w, x, x]
+                    bbox_y = [y, y, y+h, y+h, y]
+                    plt.plot(bbox_x, bbox_y, '--', color=c)
+                    # category name
+                    name = self.loadCats(ann['category_id'])[0]['name']
+                    caption = "{}".format(name)
+                    ax.text(x, y-8, caption, color=c, size=12, backgroundcolor="none")
             p = PatchCollection(polygons, facecolor=color, linewidths=0, alpha=0.4)
             ax.add_collection(p)
             p = PatchCollection(polygons, facecolor='none', edgecolors=color, linewidths=2)
